@@ -1,0 +1,65 @@
+---
+- name: Converge playbook
+  hosts: all
+  roles:
+    - role: memoryleak.postfix
+      postfix_virtual_alias_maps_file: /etc/postfix/virtual
+      postifx_sasl_passwd_file: /etc/postfix/sasl_passwd
+      postifx_main_config:
+        - name: relayhost
+          value: "[localhost]:25"
+          state: present
+
+        - name: smtp_sasl_auth_enable
+          value: "yes"
+          state: present
+
+        - name: smtp_sasl_security_options
+          value: noanonymous
+          state: present
+
+        - name: smtp_sasl_password_maps
+          value: hash:/etc/postfix/sasl_passwd
+          state: present
+
+        - name: smtp_use_tls
+          value: "yes"
+          state: present
+
+        - name: smtp_tls_security_level
+          value: encrypt
+          state: present
+
+        - name: smtp_tls_note_starttls_offer
+          value: "yes"
+          state: present
+
+        - name: -o smtp_fallback_relay
+          value: ""
+          state: absent
+
+        - name: virtual_alias_maps
+          value: regexp:/etc/postfix/virtual
+          state: present
+
+        - name: virtual_alias_domains
+          value: ""
+          state: present
+
+        - name: inet_interfaces
+          value: all
+          state: present
+
+        - name: inet_protocol
+          value: ipv4
+          state: present
+
+      postifx_sasl_passwd:
+        - host: localhost
+          port: 25
+          username: hello
+          password: secret
+
+      postfix_virtual_alias_maps:
+        - alias: /^.+$/
+          value: hello@example.com

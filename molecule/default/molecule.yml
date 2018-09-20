@@ -1,0 +1,28 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+platforms:
+  - name: ansible-role-postfix-centos7
+    image: memoryleak/centos-systemd
+    privileged: true
+    volume_mounts:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+    command: "/usr/sbin/init"
+    environment: { container: docker }
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+  playbooks:
+    converge: playbook.yml
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

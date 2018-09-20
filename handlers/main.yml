@@ -1,0 +1,8 @@
+---
+# handlers file for memoryleak.postfix
+- name: postfix-restarted-handler
+  service:
+    enabled: true
+    name: postfix
+    state: restarted
+  tags: ['service']

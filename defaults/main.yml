@@ -1,0 +1,29 @@
+---
+postifx_main_config_file: /etc/postfix/main.cf
+# Change or set configuration options in the main.cf file.
+# Example:
+# postifx_main_config:
+#   - name: smtp_sasl_security_options
+#     value: noanonymous
+#     state: present|absent
+#
+postifx_main_config: []
+
+# Location of passwd file.
+postifx_sasl_passwd_file: /etc/postfix/sasl_passwd
+
+# postifx_sasl_passwd:
+#   - host: localhost
+#     port: 25
+#     username: hello
+#     password: secret
+postifx_sasl_passwd: []
+
+# Location of passwd file.
+postfix_virtual_alias_maps_file: /etc/postfix/virtual
+
+# Postfix alias map values.
+# postfix_virtual_alias_maps:
+#   - alias: /^.+$/
+#     value: hello@example.com
+postfix_virtual_alias_maps: []

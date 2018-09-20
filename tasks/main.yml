@@ -1,0 +1,62 @@
+---
+# tasks file for memoryleak.postfix
+- name: Install postfix.
+  package:
+    name: postfix
+    state: present
+  tags: ['package']
+
+- name: Install cyrus-sasl-plain
+  package:
+    name: cyrus-sasl-plain
+    state: present
+  tags: ['package']
+
+- name: Set main.cf configuration values.
+  lineinfile:
+    backup: true
+    line: "{{ item.name + ' = ' + item.value }}"
+    path: "{{ postifx_main_config_file }}"
+    regexp: "{{ '#?' + item.name + ' =(.*)?'}}"
+    state: "{{ item.state }}"
+  tags: ['lineinfile']
+  with_items: "{{ postifx_main_config }}"
+  when: postifx_main_config | length > 0
+  notify: postfix-restarted-handler
+
+
+- name: Create sasl credentials.
+  template:
+    dest: "{{ postifx_sasl_passwd_file }}"
+    group: root
+    mode: 0644
+    owner: root
+    src: sasl_passwd.j2
+    backup: true
+  tags: ['template']
+  when: postifx_sasl_passwd | length > 0
+  notify: postfix-restarted-handler
+
+- name: Postmap sasl_passwd file
+  command: "postmap {{ postifx_sasl_passwd_file }}"
+  args:
+    creates: "{{ postifx_sasl_passwd_file }}.db"
+  tags: ['shell']
+
+- name: Create virtual entries.
+  template:
+    dest: "{{ postfix_virtual_alias_maps_file }}"
+    group: root
+    mode: 0644
+    owner: root
+    src: virtual.j2
+    backup: true
+  tags: ['template']
+  when: postifx_sasl_passwd | length > 0
+  notify: postfix-restarted-handler
+
+- name: Postmap virtual alias file
+  command: "postmap {{ postfix_virtual_alias_maps_file }}"
+  args:
+    creates: "{{ postfix_virtual_alias_maps_file }}.db"
+  tags: ['shell']

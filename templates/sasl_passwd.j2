@@ -1,0 +1,3 @@
+{% for item in postifx_sasl_passwd %}
+[{{ item.host }}]:{{ item.port }} {{ item.username }}:{{ item.password }}
+{% endfor %}
