@@ -10,5 +10,7 @@ before_install:
 install:
   - pip install molecule
   - pip install docker
+before_script:
+  - ln -s ansible-role-postfix memoryleak.postfix
 script:
   - molecule test
