@@ -1,16 +1,25 @@
 ---
-sudo: required
 language: python
-python:
-  - "3.6"
-services:
-  - docker
-before_install:
-  - sudo apt-get -qq update
+services: docker
+
+env:
+  global:
+    - ROLE_NAME: postfix
+  matrix:
+    - MOLECULE_DISTRO: centos7
+    - MOLECULE_DISTRO: ubuntu1804
+    - MOLECULE_DISTRO: debian9
+
 install:
-  - pip install molecule
-  - pip install docker
+  # Install test dependencies.
+  - pip install molecule docker
+
 before_script:
-  - ln -s ansible-role-postfix memoryleak.postfix
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-role-$ROLE_NAME memoryleak.$ROLE_NAME
+  - cd memoryleak.$ROLE_NAME
+
 script:
+  # Run tests.
   - molecule test
