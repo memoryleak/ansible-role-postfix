@@ -52,7 +52,7 @@
     src: virtual.j2
     backup: true
   tags: ['template']
-  when: postfix_virtual_alias_maps_file | length > 0
+  when: postfix_virtual_alias_maps | length > 0
   notify: postfix-restarted-handler
 
 - name: Postmap virtual alias file
