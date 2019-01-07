@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/memoryleak/ansible-role-postfix.svg?branch=v2)](https://travis-ci.org/memoryleak/ansible-role-postfix)
+[![Build Status](https://travis-ci.org/memoryleak/ansible-role-postfix.svg)](https://travis-ci.org/memoryleak/ansible-role-postfix)
 
 memoryleak.postfix
 ==================
